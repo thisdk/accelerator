@@ -19,6 +19,8 @@ COPY ./sing-box.json /etc/sing-box/config.json
 COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY ./entrypoint.sh /usr/bin/entrypoint.sh
 
-ENTRYPOINT ["bash /usr/bin/entrypoint.sh"]
+RUN chmod +x /usr/bin/entrypoint.sh
+
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
