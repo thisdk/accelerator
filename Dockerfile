@@ -2,7 +2,7 @@ FROM alpine:latest
 
 ARG UDP2RAW_VERSION="20230206.0"
 ARG KCPTUN_VERSION="20240107"
-ARG SINGBOX_VERSION="1.8.5"
+ARG SINGBOX_VERSION="1.9.0-alpha.9"
 
 ARG UDP2RAW_URL="https://github.com/wangyu-/udp2raw/releases/download/${UDP2RAW_VERSION}/udp2raw_binaries.tar.gz"
 ARG KCPTUN_URL="https://github.com/xtaci/kcptun/releases/download/v${KCPTUN_VERSION}/kcptun-linux-amd64-${KCPTUN_VERSION}.tar.gz"
