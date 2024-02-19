@@ -7,7 +7,7 @@
         {
             "type": "shadowsocks",
             "listen": "127.0.0.1",
-            "listen_port": 58388,
+            "listen_port": 8388,
             "tcp_fast_open": true,
             "method": "none",
             "password": "game"
