@@ -10,6 +10,8 @@ fi
 
 WIREGUARD_IP=$(dig +short wireguard)
 
-sed -i "s#wireguard#$WIREGUARD_IP#g" /etc/supervisor/conf.d/supervisord.conf
+echo $WIREGUARD_IP
+
+sed -i "s#wireguard#172.18.0.6#g" /etc/supervisor/conf.d/supervisord.conf
 
 exec "$@"
