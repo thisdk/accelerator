@@ -9,7 +9,7 @@ ARG SPEEDER_URL="https://github.com/wangyu-/UDPspeeder/releases/download/${SPEED
 COPY ./entrypoint.sh /usr/bin/entrypoint.sh
 
 RUN set -ex \
-    && apk add --no-cache tzdata iptables ip6tables supervisor \
+    && apk add --no-cache tzdata iptables ip6tables supervisor dig \
     && wget -O ~/udp2raw.tar.gz ${UDP2RAW_URL} && tar -zxvf ~/udp2raw.tar.gz udp2raw_amd64_hw_aes -C /tmp/ && mv /tmp/udp2raw_amd64_hw_aes /usr/bin/udp2raw && rm -f ~/udp2raw.tar.gz \
     && wget -O ~/speeder.tar.gz ${SPEEDER_URL} && tar -zxvf ~/speeder.tar.gz speederv2_amd64 -C /tmp/ && mv /tmp/speederv2_amd64 /usr/bin/speederv2 && rm -f ~/speeder.tar.gz \
     && mkdir -p /etc/supervisor/conf.d/ && chmod +x /usr/bin/entrypoint.sh
