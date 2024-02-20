@@ -14,7 +14,7 @@ RUN set -ex \
     && wget -O ~/speeder.tar.gz ${SPEEDER_URL} && tar -zxvf ~/speeder.tar.gz speederv2_amd64 -C /tmp/ && mv /tmp/speederv2_amd64 /usr/bin/speederv2 && rm -f ~/speeder.tar.gz \
     && mkdir -p /etc/supervisor/conf.d/ && chmod +x /usr/bin/entrypoint.sh
 
-COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf.backup
 
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 
