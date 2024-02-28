@@ -16,6 +16,8 @@ RUN set -ex \
 
 COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf.backup
 
+EXPOSE 8585
+
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
