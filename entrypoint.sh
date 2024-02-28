@@ -12,12 +12,6 @@ else
     sed -i "s#udp_fec#2:6#g" /etc/supervisor/conf.d/supervisord.conf
 fi
 
-if [ $UDP2RAW_PORT ];then
-    sed -i "s#udp2raw_port#$UDP2RAW_PORT#g" /etc/supervisor/conf.d/supervisord.conf
-else
-    sed -i "s#udp2raw_port#8585#g" /etc/supervisor/conf.d/supervisord.conf
-fi
-
 if [ $TARGET_ADDR ];then
     sed -i "s#wireguard#$TARGET_ADDR#g" /etc/supervisor/conf.d/supervisord.conf
 else
