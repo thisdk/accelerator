@@ -9,7 +9,7 @@ WIREGUARD_IP=$(dig +short wireguard)
 if [ $UDP_FEC ];then
     sed -i "s#UDP_FEC#$UDP_FEC#g" /etc/supervisor/conf.d/supervisord.conf
 else
-    sed -i "s#UDP_FEC#2:6#g" /etc/supervisor/conf.d/supervisord.conf
+    sed -i "s#UDP_FEC#2:4#g" /etc/supervisor/conf.d/supervisord.conf
 fi
 
 if [ $LISTENER_ADDR ];then
