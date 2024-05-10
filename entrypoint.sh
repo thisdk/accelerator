@@ -11,7 +11,7 @@ fi
 if [ $TARGET_ADDR ];then
     sed -i "s#TARGET_ADDR#$TARGET_ADDR#g" /etc/supervisor/conf.d/supervisord.conf
 else
-    sed -i "s#TARGET_ADDR#sing-box:8585#g" /etc/supervisor/conf.d/supervisord.conf
+    sed -i "s#TARGET_ADDR#127.0.0.1:8585#g" /etc/supervisor/conf.d/supervisord.conf
 fi
 
 exec "$@"
