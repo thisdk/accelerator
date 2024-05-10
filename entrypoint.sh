@@ -1,7 +1,5 @@
 #!/bin/sh
 
-sleep 3
-
 cp -f /etc/supervisor/conf.d/supervisord.conf.backup /etc/supervisor/conf.d/supervisord.conf
 
 if [ $LISTEN_ADDR ];then
