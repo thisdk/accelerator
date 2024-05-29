@@ -14,7 +14,7 @@ RUN set -ex \
     && wget -O ~/tinyvpn.tar.gz ${TINYVPN_URL} && tar -zxvf ~/tinyvpn.tar.gz tinyvpn_amd64 -C /tmp/ && mv /tmp/tinyvpn_amd64 /usr/bin/tinyvpn && rm -f ~/tinyvpn.tar.gz \
     && mkdir -p /etc/supervisor/conf.d/ && chmod +x /usr/bin/entrypoint.sh
 
-COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf.backup
+COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 8686
 
