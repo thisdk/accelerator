@@ -7,4 +7,4 @@ TCN : 目标容器名称
 
 TCP : 目标容器端口
 
-FEC : fec值
+FEC : UDP加速FEC参数
