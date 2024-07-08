@@ -2,16 +2,16 @@
 
 sleep 3
 
-: ${TCN:=sing-box}
-: ${TCP:=8585}
+: ${TCN:=wireguard}
+: ${TCP:=51820}
 : ${FEC:=1:1,2:2,8:6,20:10}
 
-TARGET_IP=$(dig +short $TCN)
-
-iptables -t nat -A PREROUTING -p tcp --dport $TCP -j DNAT --to-destination $TARGET_IP:$TCP
-iptables -t nat -A POSTROUTING -d $TARGET_IP -p tcp --dport $TCP -j MASQUERADE
+CIP=$(dig +short $TCN)
 
 cp -f /etc/supervisor/conf.d/supervisord.conf.backup /etc/supervisor/conf.d/supervisord.conf
+
+sed -i "s#CIP#$CIP#g" /etc/supervisor/conf.d/supervisord.conf
+sed -i "s#TCP#$TCP#g" /etc/supervisor/conf.d/supervisord.conf
 sed -i "s#FEC#$FEC#g" /etc/supervisor/conf.d/supervisord.conf
 
 exec "$@"
