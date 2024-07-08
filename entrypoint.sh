@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sleep 3
+sleep 2
 
 : ${TCN:=wireguard}
 : ${TCP:=51820}
