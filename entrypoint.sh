@@ -2,8 +2,8 @@
 
 sleep 2
 
-: ${TCN:=wireguard}
-: ${TCP:=51820}
+: ${TCN:=sing-box}
+: ${TCP:=8585}
 : ${FEC:=1:1,2:2,8:6,20:10}
 
 CIP=$(dig +short $TCN)
