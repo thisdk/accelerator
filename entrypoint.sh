@@ -3,7 +3,7 @@
 sleep 3
 
 : ${TCN:=sing-box}
-: ${TCP:=8585}
+: ${TCP:=8388}
 : ${FEC:=1:1,2:2,8:6,20:10}
 
 TARGET_IP=$(dig +short $TCN)
