@@ -6,6 +6,16 @@ RUN set -ex \
     && apk add --no-cache git build-base linux-headers \
     && git clone https://github.com/wangyu-/udp2raw.git \
     && cd udp2raw \
+    && make
+
+FROM alpine:latest AS tinyvpn
+
+WORKDIR /
+
+RUN set -ex \
+    && apk add --no-cache git build-base linux-headers \
+    && git clone --recursive https://github.com/wangyu-/tinyfecVPN.git \
+    && cd tinyfecVPN \
     && make \
     && ls
 
