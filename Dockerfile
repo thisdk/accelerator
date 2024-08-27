@@ -9,18 +9,6 @@ RUN set -ex \
     && make \
     && ls
 
-FROM alpine:latest AS tinyvpn
-
-WORKDIR /
-
-RUN set -ex \
-    && apk add --no-cache git build-base linux-headers \
-    && it clone --recursive https://github.com/wangyu-/tinyfecVPN.git \
-    && cd tinyfecVPN \
-    && make \
-    && ls
-
-
 FROM alpine:latest
 
 RUN set -ex && apk add --no-cache tzdata iptables supervisor bind-tools
