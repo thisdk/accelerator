@@ -7,7 +7,7 @@ RUN set -ex \
     && git clone https://github.com/wangyu-/udp2raw.git \
     && cd udp2raw \
     && make \
-    && ls -alh
+    && ls -l
 
 FROM alpine:latest AS tinyvpn
 
@@ -18,7 +18,7 @@ RUN set -ex \
     && it clone --recursive https://github.com/wangyu-/tinyfecVPN.git \
     && cd tinyfecVPN \
     && make \
-    && ls -alh
+    && ls -l
 
 
 FROM alpine:latest
