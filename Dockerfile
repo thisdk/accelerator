@@ -24,3 +24,4 @@ FROM alpine:latest
 RUN set -ex && apk add --no-cache tzdata iptables supervisor bind-tools
 
 COPY --from=udp2raw /udp2raw/udp2raw /usr/bin/
+COPY --from=tinyvpn /tinyfecVPN/tinyvpn /usr/bin/
