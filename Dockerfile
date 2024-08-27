@@ -7,8 +7,8 @@ RUN set -ex \
     && git clone https://github.com/wangyu-/udp2raw.git \
     && git clone https://github.com/wangyu-/UDPspeeder.git \
     && git clone --recursive https://github.com/wangyu-/tinyfecVPN.git \
-    && cd /udp2raw && make
-    && cd /UDPspeeder && make
+    && cd /udp2raw && make \
+    && cd /UDPspeeder && make \
     && cd /tinyfecVPN && make
 
 FROM alpine:latest
