@@ -19,3 +19,9 @@ RUN set -ex && apk add --no-cache tzdata iptables supervisor bind-tools
 COPY --from=builder /udp2raw/udp2raw /usr/bin/
 COPY --from=builder /UDPspeeder/speederv2 /usr/bin/
 COPY --from=builder /tinyfecVPN/tinyvpn /usr/bin/
+
+EXPOSE 8585
+
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
