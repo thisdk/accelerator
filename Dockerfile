@@ -14,11 +14,15 @@ RUN set -ex \
 
 FROM alpine:latest
 
-RUN set -ex && apk add --no-cache tzdata iptables supervisor bind-tools
-
 COPY --from=builder /udp2raw/udp2raw /usr/bin/
 COPY --from=builder /UDPspeeder/speederv2 /usr/bin/
 COPY --from=builder /tinyfecVPN/tinyvpn /usr/bin/
+
+COPY ./entrypoint.sh /usr/bin/entrypoint.sh
+COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf.backup
+
+RUN set -ex && apk add --no-cache tzdata iptables supervisor bind-tools \
+    && chmod +x /usr/bin/entrypoint.sh
 
 EXPOSE 8585
 
