@@ -3,7 +3,7 @@
 : ${SIP:=SERVER}
 : ${FEC:=1:1,2:2,8:6,20:10}
 
-if [ "$TYPE" = "SERVER" ]; then
+if [ "$SIP" = "SERVER" ]; then
     sleep 3
     TIP=$(dig +short sing-box)
     iptables -t nat -A PREROUTING -p tcp --dport 8388 -j DNAT --to-destination $TIP:8388
