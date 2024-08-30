@@ -3,7 +3,6 @@
 : ${SIP:=SERVER}
 : ${FEC:=1:1,2:2,8:6,20:10}
 
-# 根据 TYPE 变量的值执行不同的操作
 if [ "$TYPE" = "SERVER" ]; then
     sleep 3
     TIP=$(dig +short sing-box)
