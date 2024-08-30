@@ -19,7 +19,8 @@ COPY --from=builder /UDPspeeder/speederv2 /usr/bin/
 COPY --from=builder /tinyfecVPN/tinyvpn /usr/bin/
 
 COPY ./entrypoint.sh /usr/bin/entrypoint.sh
-COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf.backup
+COPY ./supervisord-server.conf /etc/supervisor/conf.d/supervisord-server.conf.backup
+COPY ./supervisord-client.conf /etc/supervisor/conf.d/supervisord-client.conf.backup
 
 RUN set -ex && apk add --no-cache tzdata iptables supervisor bind-tools \
     && chmod +x /usr/bin/entrypoint.sh
