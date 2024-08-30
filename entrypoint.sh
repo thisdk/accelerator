@@ -14,6 +14,8 @@ if [ "$SIP" = "SERVER" ]; then
 else
     iptables -t nat -A PREROUTING -p tcp --dport 8388 -j DNAT --to-destination 10.18.38.1:8388
     iptables -t nat -A PREROUTING -p udp --dport 8388 -j DNAT --to-destination 10.18.38.1:8388
+    iptables -t nat -A POSTROUTING -d 10.18.38.1 -p tcp --dport 8388 -j MASQUERADE
+    iptables -t nat -A POSTROUTING -d 10.18.38.1 -p udp --dport 8388 -j MASQUERADE
     cp -f /etc/supervisor/conf.d/supervisord-client.conf.backup /etc/supervisor/conf.d/supervisord.conf
     sed -i "s#SIP#$SIP#g" /etc/supervisor/conf.d/supervisord.conf
 fi
