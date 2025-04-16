@@ -3,11 +3,9 @@ FROM alpine:latest AS udpBuilder
 WORKDIR /
 
 RUN set -ex \
-    && apk add --no-cache git build-base linux-headers \
+    && apk add --no-cache git build-base \
     && git clone https://github.com/wangyu-/udp2raw.git \
-    && git clone https://github.com/wangyu-/UDPspeeder.git \
-    && cd /udp2raw && make \
-    && cd /UDPspeeder && make
+    && cd /udp2raw && make
 
 FROM golang:1.21.0-alpine3.18 as kcpBuilder
 ENV GO111MODULE=on
@@ -20,7 +18,6 @@ RUN apk add git \
 FROM alpine:latest
 
 COPY --from=udpBuilder /udp2raw/udp2raw /usr/bin/
-COPY --from=udpBuilder /UDPspeeder/speederv2 /usr/bin/
 
 COPY --from=kcpBuilder /client /usr/bin/kcp_client
 COPY --from=kcpBuilder /server /usr/bin/kcp_server
@@ -31,7 +28,7 @@ COPY ./supervisord-client.conf /etc/supervisor/conf.d/supervisord-client.conf.ba
 
 RUN set -ex && apk add --no-cache tzdata iptables supervisor bind-tools && chmod +x /usr/bin/entrypoint.sh
 
-EXPOSE 8383 8388 8585 8588
+EXPOSE 8585
 
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 
