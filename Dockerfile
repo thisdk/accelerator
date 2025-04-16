@@ -33,10 +33,9 @@ COPY ./entrypoint.sh /usr/bin/entrypoint.sh
 COPY ./supervisord-server.conf /etc/supervisor/conf.d/supervisord-server.conf.backup
 COPY ./supervisord-client.conf /etc/supervisor/conf.d/supervisord-client.conf.backup
 
-RUN set -ex && apk add --no-cache tzdata iptables supervisor bind-tools \
-    && chmod +x /usr/bin/entrypoint.sh
+RUN set -ex && apk add --no-cache tzdata iptables supervisor bind-tools && chmod +x /usr/bin/entrypoint.sh
 
-EXPOSE 8388 8585
+EXPOSE 8388 8588 8383 8585
 
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 
