@@ -3,7 +3,7 @@ FROM alpine:latest AS udpBuilder
 WORKDIR /
 
 RUN set -ex \
-    && apk add --no-cache git build-base \
+    && apk add --no-cache git build-base linux-headers \
     && git clone https://github.com/wangyu-/udp2raw.git \
     && cd /udp2raw && make
 
