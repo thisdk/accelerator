@@ -7,7 +7,7 @@ RUN apk add --no-cache --virtual .build-deps \
     linux-headers && \
     git clone --depth 1 https://github.com/wangyu-/udp2raw.git && \
     cd udp2raw && \
-    make dynamic && \
+    make && \
     apk del .build-deps && \
     rm -rf /var/cache/apk/*
 
@@ -37,7 +37,7 @@ RUN apk add --no-cache \
     mkdir -p /etc/supervisor/conf.d
 
 # Copy binaries
-COPY --from=udpBuilder /build/udp2raw/udp2raw_dynamic /usr/bin/udp2raw
+COPY --from=udpBuilder /build/udp2raw/udp2raw /usr/bin/udp2raw
 COPY --from=kcpBuilder /client /usr/bin/kcp_client
 COPY --from=kcpBuilder /server /usr/bin/kcp_server
 
