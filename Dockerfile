@@ -7,13 +7,13 @@ RUN apk add --no-cache git build-base linux-headers && \
     make
 
 FROM golang:1.21.0-alpine3.18 AS kcpBuilder
-ENV GO111MODULE=on CGO_ENABLED=0
+ENV GO111MODULE=on
 WORKDIR /build
 RUN apk add --no-cache git && \
     git clone --depth 1 https://github.com/xtaci/kcptun.git && \
     cd kcptun && \
-    go build -mod=vendor -trimpath -ldflags "-s -w" -o /server github.com/xtaci/kcptun/server && \
-    go build -mod=vendor -trimpath -ldflags "-s -w" -o /client github.com/xtaci/kcptun/client
+    go build -mod=vendor -ldflags "-s -w" -o /server github.com/xtaci/kcptun/server && \
+    go build -mod=vendor -ldflags "-s -w" -o /client github.com/xtaci/kcptun/client
 
 # 服务端专用镜像
 FROM alpine:latest AS server
