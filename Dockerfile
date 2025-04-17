@@ -17,7 +17,7 @@ RUN apk add --no-cache git && \
 
 # 服务端专用镜像
 FROM alpine:latest AS server
-RUN apk add --no-cache tzdata iptables supervisor bind-tools && mkdir -p /etc/supervisor/conf.d
+RUN apk add --no-cache tzdata iptables supervisor bind-tools
 COPY --from=udpBuilder /build/udp2raw/udp2raw /usr/bin/udp2raw
 COPY --from=kcpBuilder /server /usr/bin/kcptun
 COPY ./supervisord-server.conf /etc/supervisor/conf.d/supervisord.conf.backup
