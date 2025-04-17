@@ -5,7 +5,7 @@ WORKDIR /
 RUN set -ex \
     && apk add --no-cache git build-base linux-headers \
     && git clone https://github.com/wangyu-/udp2raw.git \
-    && cd /udp2raw && make
+    && cd /udp2raw && make dynamic
 
 FROM golang:1.21.0-alpine3.18 as kcpBuilder
 ENV GO111MODULE=on
@@ -17,7 +17,7 @@ RUN apk add git \
 
 FROM alpine:latest
 
-COPY --from=udpBuilder /udp2raw/udp2raw /usr/bin/
+COPY --from=udpBuilder /udp2raw/udp2raw_dynamic /usr/bin/udp2raw
 
 COPY --from=kcpBuilder /client /usr/bin/kcp_client
 COPY --from=kcpBuilder /server /usr/bin/kcp_server
