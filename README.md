@@ -7,3 +7,5 @@ docker run --restart=always --network bridge -e TZ=Asia/Shanghai --name accelera
 
 SERVER : 这里填入服务器IP与端口
 
+MODE : udp2raw 的 raw mode , 默认 faketcp 
+
