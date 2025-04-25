@@ -1,15 +1,15 @@
 #!/bin/sh
 
-: ${SIP:=SERVER}
+: ${SERVER:=SERVER}
 
 cp -f /etc/supervisor/conf.d/supervisord.conf.backup /etc/supervisor/conf.d/supervisord.conf
 
-if [ "$SIP" = "SERVER" ]; then
+if [ "$SERVER" = "SERVER" ]; then
     sleep 3
-    IP_S=$(dig +short sing-box)
-    sed -i "s#sing-box#$IP_S#g" /etc/supervisor/conf.d/supervisord.conf
+    SERVER_IP=$(dig +short sing-box)
+    sed -i "s#sing-box#$SERVER_IP#g" /etc/supervisor/conf.d/supervisord.conf
 else
-    sed -i "s#SERVER_IP#$SIP#g" /etc/supervisor/conf.d/supervisord.conf
+    sed -i "s#SERVER#$SERVER#g" /etc/supervisor/conf.d/supervisord.conf
 fi
 
 exec "$@"
