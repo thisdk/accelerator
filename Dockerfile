@@ -6,7 +6,7 @@ RUN apk add --no-cache git build-base linux-headers && \
     cd udp2raw && \
     make
 
-FROM golang:1.21.0-alpine3.18 AS kcpBuilder
+FROM golang:1.24.0-alpine3.21 AS kcpBuilder
 ENV GO111MODULE=on
 WORKDIR /build
 RUN apk add --no-cache git && \
