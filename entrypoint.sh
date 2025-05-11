@@ -1,6 +1,7 @@
 #!/bin/sh
 set -e
 
+: "${LISTENER:=0.0.0.0}"
 : "${SERVER:=SERVER}"
 : "${MODE:=faketcp}"
 
@@ -14,6 +15,7 @@ if [ "$SERVER" = "SERVER" ]; then
         echo "Failed to resolve sing-box address"
         exit 1
     fi
+    sed -i "s#LISTENER#$LISTENER#g" /etc/supervisor/conf.d/supervisord.conf
 fi
 
 sed -i "s#SERVER#$SERVER#g" /etc/supervisor/conf.d/supervisord.conf
