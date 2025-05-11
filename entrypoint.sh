@@ -2,7 +2,8 @@
 set -e
 
 : "${SERVER:=SERVER}"
-: "${MODE:=faketcp}"
+: "${IPV4_MODE:=faketcp}"
+: "${IPV6_MODE:=udp}"
 
 cp -f /etc/supervisor/conf.d/supervisord.conf.backup /etc/supervisor/conf.d/supervisord.conf
 
@@ -17,6 +18,7 @@ if [ "$SERVER" = "SERVER" ]; then
 fi
 
 sed -i "s#SERVER#$SERVER#g" /etc/supervisor/conf.d/supervisord.conf
-sed -i "s#MODE#$MODE#g" /etc/supervisor/conf.d/supervisord.conf
+sed -i "s#IPV4_MODE#$IPV4_MODE#g" /etc/supervisor/conf.d/supervisord.conf
+sed -i "s#IPV6_MODE#$IPV6_MODE#g" /etc/supervisor/conf.d/supervisord.conf
 
 exec "$@"
