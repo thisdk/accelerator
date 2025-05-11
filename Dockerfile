@@ -23,7 +23,8 @@ COPY --from=kcpBuilder /server /usr/bin/kcptun
 COPY ./supervisord-server.conf /etc/supervisor/conf.d/supervisord.conf.backup
 COPY ./entrypoint.sh /usr/bin/entrypoint.sh
 RUN chmod +x /usr/bin/entrypoint.sh /usr/bin/udp2raw /usr/bin/kcptun
-EXPOSE 8585
+EXPOSE 8484
+EXPOSE 8686
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
@@ -35,6 +36,7 @@ COPY --from=kcpBuilder /client /usr/bin/kcptun
 COPY ./supervisord-client.conf /etc/supervisor/conf.d/supervisord.conf.backup
 COPY ./entrypoint.sh /usr/bin/entrypoint.sh
 RUN chmod +x /usr/bin/entrypoint.sh /usr/bin/udp2raw /usr/bin/kcptun
-EXPOSE 8585
+EXPOSE 8484
+EXPOSE 8686
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
