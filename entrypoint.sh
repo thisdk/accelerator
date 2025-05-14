@@ -8,11 +8,11 @@ set -e
 
 cp -f /etc/supervisor/conf.d/supervisord.conf.backup /etc/supervisor/conf.d/supervisord.conf
 
-if [ "$SERVER" = "SERVER" ]; then
+if [ "$s" = "SERVER" ]; then
     echo "Waiting for DNS resolution..."
     sleep 3
-    SERVER=$(dig +short sing-box)
-    if [ -z "$SERVER" ]; then
+    s=$(dig +short sing-box)
+    if [ -z "$s" ]; then
         echo "Failed to resolve sing-box address"
         exit 1
     fi
