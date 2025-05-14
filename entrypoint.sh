@@ -21,10 +21,11 @@ if [ "$SERVER" = "SERVER" ]; then
     fi
 fi
 
-sed -i "s#LISTENER#$LISTENER#g" /etc/supervisor/conf.d/supervisord.conf
-sed -i "s#PORT#$PORT#g" /etc/supervisor/conf.d/supervisord.conf
-sed -i "s#SERVER#$SERVER#g" /etc/supervisor/conf.d/supervisord.conf
 sed -i "s#RANDOM_PORT#$RANDOM_PORT#g" /etc/supervisor/conf.d/supervisord.conf
+
+sed -i "s#LISTENER#$LISTENER#g" /etc/supervisor/conf.d/supervisord.conf
+sed -i "s#SERVER#$SERVER#g" /etc/supervisor/conf.d/supervisord.conf
+sed -i "s#PORT#$PORT#g" /etc/supervisor/conf.d/supervisord.conf
 sed -i "s#MODE#$MODE#g" /etc/supervisor/conf.d/supervisord.conf
 
 exec "$@"
