@@ -1,13 +1,10 @@
 #!/bin/sh
 set -e
 
-: "${LISTENER:=0.0.0.0}"
-: "${PORT:=8585}"
-: "${SERVER:=SERVER}"
-: "${MODE:=faketcp}"
-
-RANDOM_PORT=$(shuf -i 10000-60000 -n 1)
-echo "Generated random port for internal service: $RANDOM_PORT"
+: "${l:=0.0.0.0}"
+: "${p:=8585}"
+: "${s:=SERVER}"
+: "${m:=faketcp}"
 
 cp -f /etc/supervisor/conf.d/supervisord.conf.backup /etc/supervisor/conf.d/supervisord.conf
 
@@ -21,11 +18,13 @@ if [ "$SERVER" = "SERVER" ]; then
     fi
 fi
 
-sed -i "s#RANDOM_PORT#$RANDOM_PORT#g" /etc/supervisor/conf.d/supervisord.conf
+RANDOM_PORT=$(shuf -i 10000-60000 -n 1)
+echo "Generated random port for internal service: $RANDOM_PORT"
 
-sed -i "s#LISTENER#$LISTENER#g" /etc/supervisor/conf.d/supervisord.conf
-sed -i "s#SERVER#$SERVER#g" /etc/supervisor/conf.d/supervisord.conf
-sed -i "s#PORT#$PORT#g" /etc/supervisor/conf.d/supervisord.conf
-sed -i "s#MODE#$MODE#g" /etc/supervisor/conf.d/supervisord.conf
+sed -i "s#LISTENER_ADDRESS#$l#g" /etc/supervisor/conf.d/supervisord.conf
+sed -i "s#LISTENER_PORT#$p#g" /etc/supervisor/conf.d/supervisord.conf
+sed -i "s#TARGET_SERVER#$s#g" /etc/supervisor/conf.d/supervisord.conf
+sed -i "s#UDP2RAW_MODE#$m#g" /etc/supervisor/conf.d/supervisord.conf
+sed -i "s#INTERNAL_PORT#$RANDOM_PORT#g" /etc/supervisor/conf.d/supervisord.conf
 
 exec "$@"
