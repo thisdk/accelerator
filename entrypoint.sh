@@ -5,8 +5,8 @@ set -e
 : "${SERVER:=SERVER}"
 : "${MODE:=faketcp}"
 
-RANDOM_PORT=$(shuf -i 10000-60000 -n 1)
-echo "Generated random port for internal service: $RANDOM_PORT"
+RANDOM=$(shuf -i 10000-60000 -n 1)
+echo "Generated random port for internal service: $RANDOM"
 
 cp -f /etc/supervisor/conf.d/supervisord.conf.backup /etc/supervisor/conf.d/supervisord.conf
 
@@ -20,9 +20,9 @@ if [ "$SERVER" = "SERVER" ]; then
     fi
 fi
 
-sed -i "s#RANDOM_PORT#$RANDOM_PORT#g" /etc/supervisor/conf.d/supervisord.conf
 sed -i "s#LISTENER#$LISTENER#g" /etc/supervisor/conf.d/supervisord.conf
 sed -i "s#SERVER#$SERVER#g" /etc/supervisor/conf.d/supervisord.conf
+sed -i "s#RANDOM#$RANDOM#g" /etc/supervisor/conf.d/supervisord.conf
 sed -i "s#MODE#$MODE#g" /etc/supervisor/conf.d/supervisord.conf
 
 exec "$@"
