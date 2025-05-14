@@ -6,14 +6,15 @@ set -e
 : "${TARGET_SERVER:=SERVER}"
 : "${UDP2RAW_MODE:=faketcp}"
 
+cp -f /etc/supervisor/conf.d/supervisord.conf.backup /etc/supervisor/conf.d/supervisord.conf
+
+sleep 3
+
 if [ "$TARGET_SERVER" = "SERVER" ]; then
-    sleep 3
     TARGET_SERVER=$(dig +short sing-box)
 fi
 
 RANDOM_PORT=$(shuf -i 10000-60000 -n 1)
-
-cp -f /etc/supervisor/conf.d/supervisord.conf.backup /etc/supervisor/conf.d/supervisord.conf
 
 sed -i "s#LISTENER_ADDRESS#$LISTENER_ADDRESS#g" /etc/supervisor/conf.d/supervisord.conf
 sed -i "s#LISTENER_PORT#$LISTENER_PORT#g" /etc/supervisor/conf.d/supervisord.conf  
