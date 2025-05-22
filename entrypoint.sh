@@ -8,9 +8,8 @@ set -e
 
 cp -f /etc/supervisor/conf.d/supervisord.conf.backup /etc/supervisor/conf.d/supervisord.conf
 
-sleep 3
-
 if [ "$TARGET_SERVER" = "SERVER" ]; then
+    sleep 3
     TARGET_SERVER=$(dig +short sing-box)
 fi
 
