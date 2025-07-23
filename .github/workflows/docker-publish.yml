@@ -1,4 +1,4 @@
-name: Publish Docker Image Flavors
+name: Build and Publish Docker Images
 
 on:
   push:
@@ -17,17 +17,17 @@ jobs:
       id-token: write
 
     steps:
-      - name: Checkout repository
+      - name: 📥 Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install cosign
+      - name: 🔐 Install cosign for image signing
         if: github.event_name != 'pull_request'
         uses: sigstore/cosign-installer@v3.3.0
 
-      - name: Set up Docker Buildx
+      - name: 🔧 Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log into registry ${{ env.REGISTRY }}
+      - name: 🔑 Log into registry ${{ env.REGISTRY }}
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
@@ -35,8 +35,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # --- Metadata steps can remain in any order ---
-      - name: Extract Docker metadata for Server
+      # =====================================================
+      # 📋 METADATA EXTRACTION
+      # =====================================================
+      - name: 🏷️ Extract metadata for Server image
         id: meta-server
         uses: docker/metadata-action@v5
         with:
@@ -44,7 +46,7 @@ jobs:
           flavor: |
             suffix=-server,onlatest=true
 
-      - name: Extract Docker metadata for Client
+      - name: 🏷️ Extract metadata for Client image
         id: meta-client
         uses: docker/metadata-action@v5
         with:
@@ -52,48 +54,72 @@ jobs:
           flavor: |
             suffix=-client,onlatest=true
 
-      # --- Build and Push Client Image FIRST ---
-      - name: Build and push Client Docker image
-        id: build-and-push-client
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          target: client # Build the client stage
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta-client.outputs.tags }}
-          labels: ${{ steps.meta-client.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      # --- Build and Push Server Image SECOND ---
-      - name: Build and push Server Docker image
+      # =====================================================
+      # 🏗️ BUILD AND PUSH IMAGES (Server → Client)
+      # =====================================================
+      - name: 🏗️ Build and push Server Docker image
         id: build-and-push-server
         uses: docker/build-push-action@v5
         with:
           context: .
-          target: server # Build the server stage
+          target: server
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta-server.outputs.tags }}
           labels: ${{ steps.meta-server.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # --- Sign Client Image FIRST ---
-      - name: Sign the Client image with Cosign
+      - name: 🏗️ Build and push Client Docker image
+        id: build-and-push-client
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          target: client
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta-client.outputs.tags }}
+          labels: ${{ steps.meta-client.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # =====================================================
+      # ✍️ SIGN IMAGES WITH COSIGN
+      # =====================================================
+      - name: ✍️ Sign Server image with Cosign
         if: github.event_name != 'pull_request'
         run: |
-          echo "${{ steps.meta-client.outputs.tags }}" | sed 's/,/\n/g' | while read tag; do
-            cosign sign --yes "${tag}@${{ steps.build-and-push-client.outputs.digest }}"
+          echo "🔏 Signing Server image tags..."
+          echo "${{ steps.meta-server.outputs.tags }}" | sed 's/,/\n/g' | while read tag; do
+            echo "  📝 Signing: ${tag}@${{ steps.build-and-push-server.outputs.digest }}"
+            cosign sign --yes "${tag}@${{ steps.build-and-push-server.outputs.digest }}"
           done
+          echo "✅ Server image signing completed"
         env:
           COSIGN_EXPERIMENTAL: "true"
 
-      # --- Sign Server Image SECOND ---
-      - name: Sign the Server image with Cosign
+      - name: ✍️ Sign Client image with Cosign
         if: github.event_name != 'pull_request'
         run: |
-          echo "${{ steps.meta-server.outputs.tags }}" | sed 's/,/\n/g' | while read tag; do
-            cosign sign --yes "${tag}@${{ steps.build-and-push-server.outputs.digest }}"
+          echo "🔏 Signing Client image tags..."
+          echo "${{ steps.meta-client.outputs.tags }}" | sed 's/,/\n/g' | while read tag; do
+            echo "  📝 Signing: ${tag}@${{ steps.build-and-push-client.outputs.digest }}"
+            cosign sign --yes "${tag}@${{ steps.build-and-push-client.outputs.digest }}"
           done
+          echo "✅ Client image signing completed"
         env:
           COSIGN_EXPERIMENTAL: "true"
+
+      # =====================================================
+      # 📊 BUILD SUMMARY
+      # =====================================================
+      - name: 📊 Display build summary
+        if: github.event_name != 'pull_request'
+        run: |
+          echo "🎉 Build and Publish Summary"
+          echo "================================"
+          echo "📦 Server Image Tags:"
+          echo "${{ steps.meta-server.outputs.tags }}" | sed 's/,/\n/g' | sed 's/^/  - /'
+          echo ""
+          echo "📦 Client Image Tags:"  
+          echo "${{ steps.meta-client.outputs.tags }}" | sed 's/,/\n/g' | sed 's/^/  - /'
+          echo ""
+          echo "✅ All images built, pushed, and signed successfully!"

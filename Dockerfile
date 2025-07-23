@@ -1,12 +1,12 @@
 # 公共构建阶段
-FROM alpine:latest AS udpBuilder
+FROM alpine:latest AS udpbuilder
 WORKDIR /build
 RUN apk add --no-cache git build-base linux-headers && \
     git clone --depth 1 https://github.com/wangyu-/udp2raw.git && \
     cd udp2raw && \
     make
 
-FROM golang:1.24.0-alpine3.21 AS kcpBuilder
+FROM golang:1.24.0-alpine3.21 AS kcpbuilder
 ENV GO111MODULE=on
 WORKDIR /build
 RUN apk add --no-cache git && \
@@ -18,8 +18,8 @@ RUN apk add --no-cache git && \
 # 服务端专用镜像
 FROM alpine:latest AS server
 RUN apk add --no-cache tzdata iptables supervisor bind-tools
-COPY --from=udpBuilder /build/udp2raw/udp2raw /usr/bin/udp2raw
-COPY --from=kcpBuilder /server /usr/bin/kcptun
+COPY --from=udpbuilder /build/udp2raw/udp2raw /usr/bin/udp2raw
+COPY --from=kcpbuilder /server /usr/bin/kcptun
 COPY ./supervisord-server.conf /etc/supervisor/conf.d/supervisord.conf.backup
 COPY ./entrypoint.sh /usr/bin/entrypoint.sh
 RUN chmod +x /usr/bin/entrypoint.sh /usr/bin/udp2raw /usr/bin/kcptun
@@ -30,8 +30,8 @@ CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 # 客户端专用镜像
 FROM alpine:latest AS client
 RUN apk add --no-cache tzdata iptables supervisor
-COPY --from=udpBuilder /build/udp2raw/udp2raw /usr/bin/udp2raw
-COPY --from=kcpBuilder /client /usr/bin/kcptun
+COPY --from=udpbuilder /build/udp2raw/udp2raw /usr/bin/udp2raw
+COPY --from=kcpbuilder /client /usr/bin/kcptun
 COPY ./supervisord-client.conf /etc/supervisor/conf.d/supervisord.conf.backup
 COPY ./entrypoint.sh /usr/bin/entrypoint.sh
 RUN chmod +x /usr/bin/entrypoint.sh /usr/bin/udp2raw /usr/bin/kcptun
